@@ -1,6 +1,6 @@
 {
   "name": "tlsfs",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "load TLS certs from filesystem",
   "main": "index.js",
   "scripts": {
