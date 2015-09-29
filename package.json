@@ -6,6 +6,14 @@
   "scripts": {
     "test": "mocha"
   },
+  "dependencies": {
+    "async": "^1"
+  },
+  "devDependencies": {
+    "mocha": "^2",
+    "expect.js": "^0.3",
+    "mock-fs": "^3"
+  },
   "repository": {
     "type": "git",
     "url": "git@github.com:Zingle/tlsfs.git"
