@@ -54,3 +54,58 @@ describe("readCertsSync", function() {
         expect(String(opts.ca[1])).to.be("ca2");
     });
 });
+
+describe("readCerts", function() {
+    it("should read one file as pfx opt", function(done) {
+        tlsfs.readCerts(["tls/pfx.crt"], function(err, opts) {
+            if (err) return done(err);
+            expect(opts).to.be.an("object");
+            expect(String(opts.pfx)).to.be("pfx");
+            expect(opts.cert).to.be(undefined);
+            expect(opts.key).to.be(undefined);
+            expect(opts.ca).to.be(undefined);
+            done();
+        });
+    });
+
+    it("should read two files as cert/key opts", function(done) {
+        tlsfs.readCerts(["tls/cert.crt", "tls/key.crt"], function(err, opts) {
+            if (err) return done(err);
+            expect(opts).to.be.an("object");
+            expect(opts.pfx).to.be(undefined);
+            expect(String(opts.cert)).to.be("cert");
+            expect(String(opts.key)).to.be("key");
+            expect(opts.ca).to.be(undefined);
+            done();
+        });
+    });
+
+    it("should read 3+ files as cert/key/ca opts", function(done) {
+        var paths = ["tls/cert.crt", "tls/key.crt", "tls/ca1.crt"];
+        
+        tlsfs.readCerts(paths, function(err, opts) {
+            if (err) return done(err);
+            expect(opts).to.be.an("object");
+            expect(opts.pfx).to.be(undefined);
+            expect(String(opts.cert)).to.be("cert");
+            expect(String(opts.key)).to.be("key");
+            expect(opts.ca).to.be.an("array");
+            expect(opts.ca.length).to.be(1);
+            expect(String(opts.ca[0])).to.be("ca1");
+
+            paths.push("tls/ca2.crt");
+            tlsfs.readCerts(paths, function(err, opts) {
+                if (err) return done(err);
+                expect(opts).to.be.an("object");
+                expect(opts.pfx).to.be(undefined);
+                expect(String(opts.cert)).to.be("cert");
+                expect(String(opts.key)).to.be("key");
+                expect(opts.ca).to.be.an("array");
+                expect(opts.ca.length).to.be(2);
+                expect(String(opts.ca[0])).to.be("ca1");
+                expect(String(opts.ca[1])).to.be("ca2");
+                done();
+            });
+        });
+    });
+});
